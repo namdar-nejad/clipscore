@@ -72,7 +72,7 @@ class CLIPCapDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         c_data = self.data[idx]
-        c_data = clip.tokenize(self.prefix + c_data, truncate=True).squeeze()
+        c_data = clip.tokenize(self.prefix + c_data).squeeze()
         return {'caption': c_data}
 
     def __len__(self):
@@ -212,6 +212,7 @@ def main():
 
     with open(args.candidates_json) as f:
         candidates = json.load(f)
+        
     candidates = [candidates[cid] for cid in image_ids]
 
     if args.references_json:
