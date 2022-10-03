@@ -122,11 +122,15 @@ def extract_all_images(images, model, device, batch_size=64, num_workers=8):
         CLIPImageDataset(images),
         batch_size=batch_size, num_workers=num_workers, shuffle=False)
     all_image_features = []
+
+    device = 'cpu'
     with torch.no_grad():
         for b in tqdm.tqdm(data):
             b = b['image'].to(device)
+            
             if device == 'cuda':
                 b = b.to(torch.float16)
+            # print(b)
             all_image_features.append(model.encode_image(b).cpu().numpy())
     all_image_features = np.vstack(all_image_features)
     return all_image_features
@@ -223,6 +227,7 @@ def main():
                 references = [[r] for r in references]
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = 'cpu'
     if device == 'cpu':
         warnings.warn(
             'CLIP runs in full float32 on CPU. Results in paper were computed on GPU, which uses float16. '
