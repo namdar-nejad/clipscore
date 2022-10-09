@@ -72,7 +72,7 @@ class CLIPCapDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         c_data = self.data[idx]
-        c_data = clip.tokenize(self.prefix + c_data).squeeze()
+        c_data = clip.tokenize(self.prefix + c_data, truncate=True).squeeze()
         return {'caption': c_data}
 
     def __len__(self):
